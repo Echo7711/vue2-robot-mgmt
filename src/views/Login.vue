@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <img class="bg" src="../assets/Vector.png">
+    <img class="bg" src="../assets/bg.png">
     <div class="login-card">
       <img class="logo" src="../assets/logo.png">
       <span class="sys-title">医院物流机器人</span>

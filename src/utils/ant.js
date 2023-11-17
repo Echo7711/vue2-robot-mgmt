@@ -5,13 +5,15 @@ import {
   Button,
   message,
   Modal,
-  notification
+  notification,
+  Layout
 } from 'ant-design-vue'
 
 Vue.use(FormModel)
 Vue.use(Input)
 Vue.use(Button)
 Vue.use(Modal)
+Vue.use(Layout)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
