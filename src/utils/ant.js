@@ -6,7 +6,10 @@ import {
   message,
   Modal,
   notification,
-  Layout
+  Layout,
+  Menu,
+  Icon,
+  Breadcrumb
 } from 'ant-design-vue'
 
 Vue.use(FormModel)
@@ -14,6 +17,9 @@ Vue.use(Input)
 Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Layout)
+Vue.use(Menu)
+Vue.use(Icon)
+Vue.use(Breadcrumb)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

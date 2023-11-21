@@ -7,8 +7,44 @@
     min-height: 100vh;
 
     .logo {
-      height: 64px;
+      height: 4rem;
       padding: 5px;
     }
+
+    .ant-menu {
+      .ant-menu-item {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    background-color: #fff;
+    padding: 0 1rem;
+    line-height: 56px;
+
+    .username {
+      font-size: 1.2rem;
+
+      .logout-btn {
+        margin-left: 10px;
+        font-size: 1.3rem;
+      }
+
+      .logout-btn:hover {
+        color: #409EFF;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    padding: 10px 10px 0 10px;
   }
 }
