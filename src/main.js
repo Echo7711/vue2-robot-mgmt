@@ -5,8 +5,10 @@ import store from './store'
 import './utils/rem'
 import './utils/ant'
 import './utils/request'
+import * as echarts from 'echarts'
 
 Vue.config.productionTip = false
+Vue.prototype.$echarts = echarts
 
 new Vue({
   router,
