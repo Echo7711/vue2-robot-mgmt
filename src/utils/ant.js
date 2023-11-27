@@ -9,7 +9,10 @@ import {
   Layout,
   Menu,
   Icon,
-  Breadcrumb
+  Breadcrumb,
+  Card,
+  Table,
+  Space
 } from 'ant-design-vue'
 
 Vue.use(FormModel)
@@ -20,6 +23,9 @@ Vue.use(Layout)
 Vue.use(Menu)
 Vue.use(Icon)
 Vue.use(Breadcrumb)
+Vue.use(Card)
+Vue.use(Table)
+Vue.use(Space)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

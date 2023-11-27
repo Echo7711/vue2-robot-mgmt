@@ -1,5 +1,36 @@
 // 数据分析
 .analysis {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   height: 100%;
+
+  .part1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 1rem 0;
+
+    .ant-card {
+      // width: 24%;
+      border: none;
+      border-radius: 8px;
+
+      .ant-card-body {
+        padding: 10px 8rem;
+      }
+
+      span {
+        font-size: 1.5rem;
+        font-weight: bolder;
+        font-family: Georgia, Times, 'Times New Roman', serif;
+      }
+
+      p {
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
+  }
 }
