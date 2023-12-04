@@ -1,20 +1,30 @@
 <template>
   <div class="manage">
-    <div class="manage-action">
+    <a-space class="manage-action">
       <a-button type="primary"><a-icon type="plus" />新增</a-button>
-      <a-button type="danger"><a-icon type="edit" />删除</a-button>
-    </div>
+      <a-button type="danger"><a-icon type="delete" />批量删除</a-button>
+    </a-space>
     <div class="manage-list">
       <a-table
       bordered
       rowKey="taskId"
       :columns="columns"
       :data-source="taskData"
+      :pagination="pagination"
       >
+        <template slot="taskStatus" slot-scope="taskStatus, record">
+          <a-badge v-if="record.taskStatus == '取货中' || '配送中'" status="processing" />
+          {{ record.taskStatus }}
+        </template>
         <template slot="action" slot-scope="taskId, record">
           <a-space>
-            <a-button size="small" @click="edit(record.taskId)">修改</a-button>
-            <a-button size="small" @click="del(record.taskId)">删除</a-button>
+            <span class="edit-btn" @click="edit(record.taskId)">
+              <a-icon type="edit" theme="filled" />修改
+            </span>
+            |
+            <span class="del-btn" @click="del(record.taskId)">
+              <a-icon type="delete" theme="filled" />删除
+            </span>
           </a-space>
         </template>
       </a-table>
@@ -47,13 +57,14 @@ const columns = [
     title: '收货点',
     dataIndex: 'receiveDpt',
     key: 'receiveDpt',
-    alert: 'center'
+    align: 'center'
   },
   {
     title: '任务状态',
     dataIndex: 'taskStatus',
     key: 'taskStatus',
-    align: 'center'
+    align: 'center',
+    scopedSlots: { customRender: 'taskStatus'}
   },
   {
     title: '完成时间',
@@ -62,9 +73,10 @@ const columns = [
     align: 'center'
   },
   {
-    title: '数据操作',
+    title: '操作',
     dataIndex: 'action',
-    key: 'action',
+    align: 'center',
+    width: '12%',
     scopedSlots: { customRender: 'action' }
   }
 ]
@@ -76,7 +88,10 @@ export default {
       taskData: [],
       pagination: {
         total: 0,
-        pageSize: 10
+        current: 1,// 当前页码
+        pageSize: 10,
+        showQuickJumper: true,
+        showTotal: total => `共有${total}条数据`
       },
       searchForm: {
         pageIndex: 1,
