@@ -31,9 +31,9 @@
             <a-icon type="robot" :style="iconStyle" />机&nbsp;&nbsp;器&nbsp;&nbsp;人
           </router-link>
         </a-menu-item>
-        <a-menu-item key="department">
-          <router-link to="/department">
-            <a-icon type="home" :style="iconStyle" />科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室
+        <a-menu-item key="warehouse">
+          <router-link to="/warehouse">
+            <a-icon type="home" :style="iconStyle" />仓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;库
           </router-link>
         </a-menu-item>
         <a-menu-item key="parkpoint">

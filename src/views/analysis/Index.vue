@@ -7,14 +7,14 @@
       </a-card>
       <a-card style="backgroundColor: #FFEFEF;">
         <span>累计服务量</span>
-        <p>{{ totalCount.serviceCount }}人</p>
+        <p>{{ totalCount.serviceCount }}位</p>
       </a-card>
       <a-card  style="backgroundColor: #F2E8FE;">
         <span>累计配送量</span>
         <p>{{ totalCount.weightCount }}千克</p>
       </a-card>
       <a-card  style="backgroundColor: #FFEFEF;">
-        <span>累计时长</span>
+        <span>累计工作时长</span>
         <p>{{ totalCount.timeCount }}</p>
       </a-card>
     </div>

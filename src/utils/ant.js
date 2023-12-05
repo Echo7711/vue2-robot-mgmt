@@ -14,7 +14,8 @@ import {
   Table,
   Space,
   ConfigProvider,
-  Badge
+  Badge,
+  Select
 } from 'ant-design-vue'
 
 Vue.use(FormModel)
@@ -30,6 +31,7 @@ Vue.use(Table)
 Vue.use(Space)
 Vue.use(ConfigProvider)
 Vue.use(Badge)
+Vue.use(Select)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

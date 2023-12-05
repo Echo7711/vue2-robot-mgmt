@@ -62,13 +62,13 @@ const routes = [
         component: () => import('../views/robot/Index.vue')
       },
       {
-        path: '/department',
-        name: 'Department',
+        path: '/warehouse',
+        name: 'WareHouse',
         meta: {
           keepalive: true,
-          breadcrumb: ['首页', '科室']
+          breadcrumb: ['首页', '仓库']
         },
-        component: () => import('../views/department/Index.vue')
+        component: () => import('../views/warehouse/Index.vue')
       },
       {
         path: '/parkpoint',

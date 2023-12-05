@@ -3,8 +3,8 @@
     <img class="bg" src="../assets/bg.png">
     <div class="login-card">
       <img class="logo" src="../assets/logo.png">
-      <span class="sys-title">医院物流机器人</span>
-      <span class="login-title">欢迎使用医院物流机器人管理系统</span>
+      <span class="sys-title">物流机器人</span>
+      <span class="login-title">欢迎使用物流机器人管理系统</span>
       <a-form-model
       class="login-form"
       ref="loginForm"

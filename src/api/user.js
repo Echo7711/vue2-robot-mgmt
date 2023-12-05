@@ -17,3 +17,12 @@ export function logout(params) {
     data: params
   })
 }
+
+// 分页查询用户
+export function getAllUsers(params) {
+  return request({
+    url: '/user/queryByPage',
+    method: 'get',
+    params: params
+  })
+}
