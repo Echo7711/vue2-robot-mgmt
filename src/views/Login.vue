@@ -18,7 +18,8 @@
           <a-input size="large" allow-clear v-model="loginForm.username" placeholder="请输入用户名"></a-input>
         </a-form-model-item>
         <a-form-model-item label="密码" prop="password">
-          <a-input-password size="large" allow-clear v-model="loginForm.password" placeholder="请输入密码"></a-input-password>
+          <a-input-password size="large" allow-clear @keyup.enter="handleLogin"
+          v-model="loginForm.password" placeholder="请输入密码"></a-input-password>
         </a-form-model-item>
         <a-button size="large" type="primary" @click="handleLogin">登录</a-button>
       </a-form-model>

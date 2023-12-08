@@ -23,7 +23,7 @@
         <template slot="action" slot-scope="taskId, record">
           <a-space>
             <span class="edit-btn" @click="edit(record.taskId)">
-              <a-icon type="edit" theme="filled" />修改
+              <a-icon type="edit" theme="filled" />编辑
             </span>
             |
             <span class="del-btn" @click="del(record.taskId)">
@@ -34,7 +34,7 @@
       </a-table>
     </div>
 
-    <!-- 新增/修改弹窗 -->
+    <!-- 新增/编辑弹窗 -->
     <a-modal
     width="30rem"
     v-model="formModal" 
@@ -168,12 +168,12 @@ export default {
       this.formModal = true
     },
 
-    // 修改
+    // 编辑
     edit() {
 
     },
 
-    // 新增/修改提交
+    // 新增/编辑提交
     save() {
 
     },

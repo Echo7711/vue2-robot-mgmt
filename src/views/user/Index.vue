@@ -18,7 +18,7 @@
         <template slot="action" slot-scope="userId, record">
           <a-space>
             <span class="edit-btn" @click="edit(record.userId)">
-              <a-icon type="edit" theme="filled" />修改
+              <a-icon type="edit" theme="filled" />编辑
             </span>
             |
             <span class="del-btn" @click="del(record.userId)">
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { getAllUsers } from '../../api/user'
 const columns = [
   {
     title: '用户编号',
@@ -55,6 +56,12 @@ const columns = [
     title: '角色',
     dataIndex: 'roleName',
     key: 'roleName',
+    align: 'center'
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
     align: 'center'
   },
   {
@@ -91,10 +98,19 @@ export default {
     },
 
     // 分页查询
-    getData(pageIndex) {
+    async getData(pageIndex) {
       this.loading = true
       this.searchForm.pageIndex = pageIndex
-
+      try {
+        await getAllUsers(this.searchForm).then(res => {
+          if (res.code == 1) {
+            this.userData = res.data.tableData
+            this.pagination.total = res.data.totalItems
+          }
+        })
+      } catch (e) {
+        this.$message.error(e)
+      }
       this.loading = false
     }
   },

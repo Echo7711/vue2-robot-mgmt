@@ -1,7 +1,7 @@
 <template>
   <div class="manage">
     <a-space class="manage-action">
-      <a-button type="primary">批量查收</a-button>
+      <a-button type="primary" @click="confirm(selectedRowKeys)">批量查收</a-button>
     </a-space>
     <div class="manage-list">
       <a-table
@@ -10,7 +10,8 @@
       :loading="loading"
       :columns="columns"
       :data-source="msgData"
-      :pagination="pagination">
+      :pagination="pagination"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }">
         <template slot="action" slot-scope="msgId, record">
           <a-button v-if="record.status == '已查收'" size="small" disabled>确认查收</a-button>
           <a-button v-else type="primary" size="small" @click="confirm(record.msgId)">确认查收</a-button>
@@ -72,6 +73,7 @@ export default {
     return {
       columns,
       loading: false,
+      selectedRowKeys: [],
       msgData: [],
       pagination: {
         total: 0,
@@ -88,6 +90,11 @@ export default {
   },
 
   methods: {
+    // 批量选择
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys
+    },
+
     // 分页查询
     async getData(pageIndex) {
       this.loading = true
@@ -102,6 +109,11 @@ export default {
         this.$message.error(e)
       }
       this.loading = false
+    },
+
+    // (批量)查收
+    confirm(msgId) {
+      console.log(msgId)
     }
   },
 
