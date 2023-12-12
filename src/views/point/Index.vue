@@ -13,8 +13,18 @@
       :data-source="pointData"
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       >
+        <!-- 停泊插槽 -->
+        <template slot="isParked"  slot-scope="text, record">
+          <span v-if="record.isParked == 1">已停泊</span>
+          <span v-else>未停泊</span>
+        </template>
+        <!-- 锁定插槽 -->
+        <template slot="isLocked"  slot-scope="text, record">
+          <span v-if="record.isLocked == 1">已锁定</span>
+          <span v-else>锁定</span>
+        </template>
         <!-- 操作插槽 -->
-        <template slot="action" slot-scope="pointId, record">
+        <template slot="action" slot-scope="text, record">
           <a-space>
             <span class="edit-btn" @click="edit(record.pointId)">
               <a-icon type="edit" theme="filled" />编辑
@@ -55,13 +65,15 @@ const columns = [
     title: '停泊状态',
     dataIndex: 'isParked',
     key: 'isParked',
-    align: 'center'
+    align: 'center',
+    scopedSlots: { customRender: 'isParked'}
   },
   {
     title: '锁定状态',
     dataIndex: 'isLocked',
     key: 'isLocked',
-    align: 'center'
+    align: 'center',
+    scopedSlots: { customRender: 'isLocked'}
   },
   {
     title: '操作',
@@ -107,6 +119,9 @@ export default {
           if (res.code == 1) {
             this.pointData = res.data.tableData
             this.pagination.total = res.data.totalItems
+            for (let item of this.pointData) {
+              item.axis = '[' + item.x + ',' + item.y + ']'
+            }
           }
         })
       } catch (e) {
