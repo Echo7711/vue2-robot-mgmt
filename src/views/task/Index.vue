@@ -15,12 +15,14 @@
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       >
         <!-- 状态插槽 -->
-        <template slot="taskStatus" slot-scope="taskStatus, record">
-          <a-badge v-if="record.taskStatus == '取货中' || '配送中'" status="processing" />
+        <template slot="taskStatus" slot-scope="text, record">
+          <a-badge v-if="record.taskStatus == '取货中'|| record.taskStatus =='配送中'" status="processing" />
+          <a-badge v-if="record.taskStatus == '已完成'" status="success" />
+          <a-badge v-if="record.taskStatus == '已取消'" status="default" />
           {{ record.taskStatus }}
         </template>
         <!-- 操作插槽 -->
-        <template slot="action" slot-scope="taskId, record">
+        <template slot="action" slot-scope="text, record">
           <a-space>
             <span class="edit-btn" @click="edit(record.taskId)">
               <a-icon type="edit" theme="filled" />编辑
@@ -40,19 +42,19 @@
     v-model="formModal" 
     :title="modalTitle"
     @ok="save">
-      <a-form-model ref="formRef" v-model="form">
-        <a-form-model-item label="发货仓库" name="pickupWhId">
-          <a-select v-model="form.pickupWhId">
+      <a-form-model ref="form" v-model="form">
+        <a-form-model-item label="发货仓库" name="deliveryWhId">
+          <a-select v-model="form.deliveryWhId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="发货点" name="pickupPointId">
-          <a-select v-model="form.pickupPointId">
+        <a-form-model-item label="发货点" name="deliveryPointId">
+          <a-select v-model="form.deliveryPointId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="收货仓库" name="receiptWhId">
-          <a-select v-model="form.reciptWhId">
+        <a-form-model-item label="收货仓库" name="receiveWhId">
+          <a-select v-model="form.receiveWhId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -63,7 +65,7 @@
 </template>
 
 <script>
-import { getAllTasks } from '../../api/task'
+import { getAllTasks, getOneTask, addTask, editTask, delTask } from '../../api/task'
 const columns = [
   {
     title: '任务编号',
@@ -78,15 +80,15 @@ const columns = [
     align: 'center'
   },
   {
-    title: '发货点',
-    dataIndex: 'deliveryDpt',
-    key: 'deliveryDpt',
+    title: '发货仓库',
+    dataIndex: 'deliveryWhName',
+    key: 'deliveryWhName',
     align: 'center'
   },
   {
-    title: '收货点',
-    dataIndex: 'receiveDpt',
-    key: 'receiveDpt',
+    title: '收货仓库',
+    dataIndex: 'receiveWhName',
+    key: 'receiveWhName',
     align: 'center'
   },
   {
@@ -132,9 +134,9 @@ export default {
       formModal: false,
       modalTitle: '',
       form: {
-        pickupWhId: '',
-        pickupPointId: '',
-        reciptWhId: ''
+        deliveryWhId: '',
+        receivePointId: '',
+        receiveWhId: ''
       }
     }
   },
@@ -162,25 +164,87 @@ export default {
       this.loading = false
     },
 
+    // 重置表单
+    resetForm() {
+      if(this.$refs.form) {
+        this.$refs.form.resetFields()
+        this.form.pickupWhId = ''
+        this.form.pickupPointId = ''
+        this.form.reciptWhId = ''
+      }
+    },
+
     // 新增
     add() {
       this.modalTitle = '新增任务'
+      this.resetForm()
       this.formModal = true
     },
 
     // 编辑
-    edit() {
-
+    edit(taskId) {
+      this.modalTitle = '编辑任务'
+      this.resetForm()
+      getOneTask({taskId: taskId}).then(res => {
+        this.form = res.data
+        this.formModal = true
+      })
     },
 
     // 新增/编辑提交
     save() {
-
+      this.$refs.form.validate(async valid => {
+        if(valid) {
+          if(this.modalTitle == '新增任务') {
+            await addTask(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            }).catch(e => {
+              console.log(e)
+            })
+          } else if(this.modalTitle == '编辑任务') {
+            await editTask(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            }).catch(e => {
+              console.log(e)
+            })
+          }
+          return true
+        } else {
+          return false
+        }
+      })
     },
 
     // (批量)删除
-    del() {
-
+    del(taskId) {
+      let ids = []
+      if(taskId instanceof Array) {
+        ids = taskId
+      } else {
+        ids.push(taskId)
+      }
+       if (ids.length == 0) {
+        this.$message.error('请先选择一条记录')
+      } else {
+        this.$confirm({
+          title: '提示',
+          content: '确认注销所选电梯吗?',
+          okText: '确定',
+          cancelText: '取消',
+          onOk: async () => {
+            await delTask(ids).then(res => {
+              this.$message.success(res.msg)
+              this.selectedRowKeys = []
+              this.getData(1)
+            })
+          },
+          onCancel () {}
+        })
+      }
     }
   },
 
