@@ -28,11 +28,44 @@
         </template>
       </a-table>
     </div>
+
+    <!-- 操作弹窗 -->
+    <a-modal
+    width="35rem"
+    v-model="formModal"
+    :title="modalTitle"
+    @ok="save">
+      <a-form-model ref="form" v-model="form" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
+        <a-form-model-item label="用户名" prop="username">
+          <a-input v-model="form.username"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="密码" prop="password">
+          <a-input v-model="form.password"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="联系方式" prop="phoneNumber">
+          <a-input v-model="form.phoneNumber"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="角色" prop="roleId">
+          <a-select v-model="form.roleId">
+            <a-select-option v-for="item in roleList" :key="item.roleId" :value="item.roleName">
+              {{item.roleName}}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="所属仓库" prop="houseId">
+          <a-select v-model="form.houseId">
+            <a-select-option v-for="item in houseList" :key="item.houseId" :value="item.houseId">
+              {{item.houseName}}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import { getAllUsers } from '../../api/user'
+import { getAllUsers, getOneUser, addUser, editUser, delUser } from '../../api/user'
 const columns = [
   {
     title: '用户编号',
@@ -53,9 +86,21 @@ const columns = [
     align: 'center'
   },
   {
+    title: '联系方式',
+    dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
+    align: 'center'
+  },
+  {
     title: '角色',
     dataIndex: 'roleName',
     key: 'roleName',
+    align: 'center'
+  },
+  {
+    title: '所属仓库',
+    dataIndex: 'houseName',
+    key: 'houseName',
     align: 'center'
   },
   {
@@ -82,12 +127,25 @@ export default {
       pagination: {
         total: 0,
         current: 1,
-        pageSize: 10
+        pageSize: 10,
+        showQuickJumper: true,
+        showTotal: total => `共有${total}条数据`
       },
       searchForm: {
         pageIndex: 1,
         pageSize: 10
-      }
+      },
+      formModal: false,
+      modalTitle: '',
+      form: {
+        username: '',
+        password: '',
+        phoneNumber: '',
+        roleId: '',
+        houseId: ''
+      },
+      roleList: [{roleId: 0, roleName: '主管'}, {roleId: 1, roleName: '管理员'}],
+      houseList: []
     }
   },
 
@@ -112,6 +170,88 @@ export default {
         this.$message.error(e)
       }
       this.loading = false
+    },
+
+    // 重置表单
+    resetForm() {
+      if(this.$refs.form) {
+        this.$refs.form.resetFields()
+        this.form.username = ''
+        this.form.password = ''
+        this.form.phoneNumber = ''
+        this.form.roleId = ''
+        this.form.houseId = ''
+      }
+    },
+
+    // 新增
+    add() {
+      this.modalTitle = '新增账号'
+      this.resetForm()
+      this.formModal = true
+    },
+
+    // 修改
+    edit(userId) {
+      this.modalTitle = '修改账号信息'
+      this.resetForm()
+      getOneUser({userId: userId}).then(res => {
+        this.form = res.data
+        this.formModal = true
+      })
+    },
+
+    save() {
+      console.log('提交表单', this.form)
+      this.$refs.form.validate(async valid => {
+        if(valid) {
+          if(this.modalTitle == '新增账号') {
+            await addUser(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            })
+          } else if (this.modalTitle == '编辑账号') {
+            await editUser(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            })
+          }
+          return true
+        } else {
+          return false
+        }
+      })
+      this.formModal = false
+    },
+
+    // （批量）删除
+    del(userId) {
+       let ids = []
+      if (userId instanceof Array) {
+        ids = userId
+      } else {
+        ids.push(userId)
+      }
+      if (ids.length == 0) {
+        this.$message.error('请先选择一条记录')
+      } else {
+        this.$confirm({
+          title: '提示',
+          content: '确认删除所选账号信息吗?',
+          okText: '确认',
+          cancelText: '取消',
+          onOk: async () => {
+            await delUser(ids).then(res => {
+              this.$message.success(res.msg)
+              this.selectedRowKeys = []
+              this.getData(1)
+            })
+          },
+          onCancel () {}
+        })
+      }
     }
   },
 
@@ -123,4 +263,5 @@ export default {
 
 <style lang="less">
 @import url('../../styles/manage.less');
+@import url('../../styles/modal.less');
 </style>
