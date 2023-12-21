@@ -43,17 +43,17 @@
     :title="modalTitle"
     @ok="save">
       <a-form-model ref="form" v-model="form">
-        <a-form-model-item label="发货仓库" name="deliveryWhId">
+        <a-form-model-item label="发货仓库" prop="deliveryWhId">
           <a-select v-model="form.deliveryWhId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="发货点" name="deliveryPointId">
+        <a-form-model-item label="发货点" prop="deliveryPointId">
           <a-select v-model="form.deliveryPointId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="收货仓库" name="receiveWhId">
+        <a-form-model-item label="收货仓库" prop="receiveWhId">
           <a-select v-model="form.receiveWhId">
             <a-select-option key="" value="">1</a-select-option>
           </a-select>

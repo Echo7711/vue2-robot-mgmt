@@ -202,7 +202,6 @@ export default {
     },
 
     save() {
-      console.log('提交表单', this.form)
       this.$refs.form.validate(async valid => {
         if(valid) {
           if(this.modalTitle == '新增账号') {
