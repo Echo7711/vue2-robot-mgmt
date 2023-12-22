@@ -136,7 +136,11 @@ export default {
       },
       userList: [],
       rules: {
-
+        houseName:[{required: true, message: '名称不能为空', trigger: 'blur'}],
+        mapId:[{required: true, message: '地图不能为空', trigger: 'blur'}],
+        building:[{required: true, message: '楼宇不能为空', trigger: 'blur'}],
+        floor:[{required: true, message: '楼层不能为空', trigger: 'blur'}],
+        userId:[{required: true, message: '管理员不能为空', trigger: 'blur'}]
       }
     }
   },
@@ -232,6 +236,7 @@ export default {
           title: '提示',
           content: '确认删除所选仓库信息吗?',
           okText: '确认',
+          okType: 'danger',
           cancelText: '取消',
           onOk: async () => {
             await delHouse(ids).then(res => {

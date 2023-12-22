@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getAllMsgs } from '@/api/msg'
+import { getAllMsgs, confirmMsg } from '@/api/msg'
 const columns = [
   {
     title: '编号',
@@ -113,7 +113,30 @@ export default {
 
     // (批量)查收
     confirm(msgId) {
-      console.log(msgId)
+      let ids = []
+      if(msgId instanceof Array) {
+        ids = msgId
+      } else {
+        ids.push(msgId)
+      }
+       if (ids.length == 0) {
+        this.$message.error('请先选择一条信息')
+      } else {
+        this.$confirm({
+          title: '提示',
+          content: '确认所选信息已查收吗?',
+          okText: '确定',
+          cancelText: '取消',
+          onOk: async () => {
+            await confirmMsg({ids: ids}).then(res => {
+              this.$message.success(res.msg)
+              this.selectedRowKeys = []
+              this.getData(1)
+            })
+          },
+          onCancel () {}
+        })
+      }
     }
   },
 

@@ -42,7 +42,7 @@
     v-model="formModal" 
     :title="modalTitle"
     @ok="save">
-      <a-form-model ref="form" v-model="form">
+      <a-form-model ref="form" v-model="form" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
         <a-form-model-item label="发货仓库" prop="deliveryWhId">
           <a-select v-model="form.deliveryWhId">
             <a-select-option key="" value="">1</a-select-option>
@@ -183,7 +183,7 @@ export default {
 
     // 编辑
     edit(taskId) {
-      this.modalTitle = '编辑任务'
+      this.modalTitle = '编辑任务信息'
       this.resetForm()
       getOneTask({taskId: taskId}).then(res => {
         this.form = res.data
@@ -203,7 +203,7 @@ export default {
             }).catch(e => {
               console.log(e)
             })
-          } else if(this.modalTitle == '编辑任务') {
+          } else if(this.modalTitle == '编辑任务信息') {
             await editTask(this.form).then(res => {
               this.$message.success(res.msg)
               this.getData(1)
@@ -234,6 +234,7 @@ export default {
           title: '提示',
           content: '确认注销所选电梯吗?',
           okText: '确定',
+          okType: 'danger',
           cancelText: '取消',
           onOk: async () => {
             await delTask(ids).then(res => {

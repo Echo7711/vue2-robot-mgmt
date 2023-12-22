@@ -8,3 +8,12 @@ export function getAllMsgs(params) {
     params: params
   })
 }
+
+// 消息通知确认
+export function confirmMsg(data) {
+  return request({
+    url: '/msg/confirm',
+    method: 'post',
+    data: data
+  })
+}

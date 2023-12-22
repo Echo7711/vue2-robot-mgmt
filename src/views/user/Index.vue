@@ -240,6 +240,7 @@ export default {
           title: '提示',
           content: '确认删除所选账号信息吗?',
           okText: '确认',
+          okType: 'danger',
           cancelText: '取消',
           onOk: async () => {
             await delUser(ids).then(res => {

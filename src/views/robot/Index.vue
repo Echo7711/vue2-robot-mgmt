@@ -27,11 +27,30 @@
         </template>
       </a-table>
     </div>
+
+    <!-- 新增/编辑弹窗 -->
+    <a-modal
+    width="35rem"
+    v-model="formModal"
+    :title="modalTitle"
+    @ok="save">
+      <a-form-model ref="form" v-model="form" :rules="rules" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
+        <a-form-model-item label="机器人编号" prop="robotId">
+          <a-input v-model="form.robotId"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="机器人名称" prop="robotName">
+          <a-input v-model="form.robotName"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="机器人IP地址" prop="robotIp">
+          <a-input v-model="form.robotIp"></a-input>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import { getAllRobots } from '../../api/robot'
+import { getAllRobots, getOneRobot, addRobot, editRobot, delRobot } from '../../api/robot'
 const columns = [
   {
     title: '机器人编号',
@@ -88,11 +107,28 @@ export default {
       searchForm: {
         pageIndex: 1,
         pageSize: 10
+      },
+      formModal: false,
+      modalTitle: '',
+      form: {
+        robotId: '',
+        robotName: '',
+        robotIp: ''
+      },
+      rules: {
+        robotId:[{required: true, message: '编号不能为空', trigger: 'blur'}],
+        robotName:[{required: true, message: '名称不能为空', trigger: 'blur'}],
+        robotIp:[{required: true, message: 'IP地址不能为空', trigger: 'blur'}]
       }
     }
   },
 
   methods: {
+    // 批量选择
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys
+    },
+
     // 分页查询
     async getData(pageIndex) {
       this.loading = true
@@ -108,6 +144,90 @@ export default {
         this.$message.error(e)
       }
       this.loading = false
+    },
+
+    // 重置表单
+    resetForm() {
+      if(this.$refs.form) {
+        this.$refs.fomr.resetFields()
+        this.form.robotId = ''
+        this.form.robotName = ''
+        this.form.robotIp = ''
+      }
+    },
+
+    // 新增
+    add() {
+      this.modalTitle = '新增机器人'
+      this.resetForm()
+      this.formModal = true
+    },
+
+    // 编辑
+    edit(robotId) {
+      this.modalTitle = '编辑机器人信息'
+      this.resetForm()
+      getOneRobot({robotId: robotId}).then(res => {
+        this.form = res.data
+        this.formModal = true
+      })
+    },
+
+    // 新增/编辑提交
+    save() {
+      this.$refs.form.validate(async valid => {
+        if(valid) {
+          if(this.modalTitle == '新增机器人') {
+            await addRobot(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            }).catch(e => {
+              console.log(e)
+            })
+          } else if(this.modalTitle == '编辑机器人信息') {
+            await editRobot(this.form).then(res => {
+              this.$message.success(res.msg)
+              this.getData(1)
+              this.formModal = false
+            }).catch(e => {
+              console.log(e)
+            })
+          }
+          return true
+        } else {
+          return false
+        }
+      })
+    },
+
+    // 删除
+    del(robotId) {
+      let ids = []
+      if(robotId instanceof Array) {
+        ids = robotId
+      } else {
+        ids.push(robotId)
+      }
+       if (ids.length == 0) {
+        this.$message.error('请先选择一条记录')
+      } else {
+        this.$confirm({
+          title: '提示',
+          content: '确认删除所选机器人信息吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk: async () => {
+            await delRobot(ids).then(res => {
+              this.$message.success(res.msg)
+              this.selectedRowKeys = []
+              this.getData(1)
+            })
+          },
+          onCancel () {}
+        })
+      }
     }
   },
 
