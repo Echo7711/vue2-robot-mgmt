@@ -157,10 +157,8 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllHouses(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.houseData = res.data.tableData
-            this.pagination.total = res.data.totalItems
-          }
+          this.houseData = res.data.tableData
+          this.pagination.total = res.data.totalItems
         })
       } catch (e) {
         this.$meessage.error(e)
@@ -230,7 +228,7 @@ export default {
         ids.push(houseId)
       }
       if (ids.length == 0) {
-        this.$message.error('请先选择一条记录')
+        this.$message.error('请先选择一条信息')
       } else {
         this.$confirm({
           title: '提示',

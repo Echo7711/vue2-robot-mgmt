@@ -42,7 +42,7 @@
     v-model="formModal" 
     :title="modalTitle"
     @ok="save">
-      <a-form-model ref="form" v-model="form" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
+      <a-form-model ref="form" v-model="form" :rules="rules" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
         <a-form-model-item label="发货仓库" prop="deliveryWhId">
           <a-select v-model="form.deliveryWhId">
             <a-select-option key="" value="">1</a-select-option>
@@ -135,8 +135,13 @@ export default {
       modalTitle: '',
       form: {
         deliveryWhId: '',
-        receivePointId: '',
+        deliveryPointId: '',
         receiveWhId: ''
+      },
+      rules: {
+        deliveryWhId: [{required: true, message: '发货仓库不能为空', trigger: 'change'}],
+        deliveryPointId: [{required: true, message: '发货点不能为空', trigger: 'change'}],
+        receiveWhId: [{required: true, message: '收货仓库不能为空', trigger: 'change'}]
       }
     }
   },
@@ -153,10 +158,8 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllTasks(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.taskData = res.data.tableData
-            this.pagination.total = res.data.totalItems
-          }
+          this.taskData = res.data.tableData
+          this.pagination.total = res.data.totalItems
         })
       } catch (e) {
         this.$message.error(e)
@@ -168,9 +171,9 @@ export default {
     resetForm() {
       if(this.$refs.form) {
         this.$refs.form.resetFields()
-        this.form.pickupWhId = ''
-        this.form.pickupPointId = ''
-        this.form.reciptWhId = ''
+        this.form.deliveryWhId = ''
+        this.form.deliveryPointId = ''
+        this.form.receiveWhId = ''
       }
     },
 
@@ -228,7 +231,7 @@ export default {
         ids.push(taskId)
       }
        if (ids.length == 0) {
-        this.$message.error('请先选择一条记录')
+        this.$message.error('请先选择一条信息')
       } else {
         this.$confirm({
           title: '提示',

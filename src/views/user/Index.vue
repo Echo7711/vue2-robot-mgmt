@@ -35,7 +35,7 @@
     v-model="formModal"
     :title="modalTitle"
     @ok="save">
-      <a-form-model ref="form" v-model="form" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
+      <a-form-model ref="form" v-model="form" :rules="rules" :labelCol="{span: 5}" :wrapperCol="{span: 16}">
         <a-form-model-item label="用户名" prop="username">
           <a-input v-model="form.username"></a-input>
         </a-form-model-item>
@@ -144,6 +144,13 @@ export default {
         roleId: '',
         houseId: ''
       },
+      rules: {
+        username: [{reuqired: true, message: '用户名不能为空', trigger: 'blur'}],
+        password: [{reuqired: true, message: '密码不能为空', trigger: 'blur'}],
+        phoneNumber: [{reuqired: true, message: '联系方式不能为空', trigger: 'blur'}],
+        roleId: [{reuqired: true, message: '角色不能为空', trigger: 'change'}],
+        houseId: [{reuqired: true, message: '所属仓库不能为空', trigger: 'blur'}]
+      },
       roleList: [{roleId: 0, roleName: '主管'}, {roleId: 1, roleName: '管理员'}],
       houseList: []
     }
@@ -161,10 +168,8 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllUsers(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.userData = res.data.tableData
-            this.pagination.total = res.data.totalItems
-          }
+          this.userData = res.data.tableData
+          this.pagination.total = res.data.totalItems
         })
       } catch (e) {
         this.$message.error(e)
@@ -234,7 +239,7 @@ export default {
         ids.push(userId)
       }
       if (ids.length == 0) {
-        this.$message.error('请先选择一条记录')
+        this.$message.error('请先选择一条信息')
       } else {
         this.$confirm({
           title: '提示',

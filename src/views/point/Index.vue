@@ -126,6 +126,11 @@ export default {
         pointName: '',
         x: '',
         y: ''
+      },
+      rules: {
+        pointName: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+        x: [{required: true, message: 'X坐标不能为空', trigger: 'blur'}],
+        y: [{required: true, message: 'Y坐标不能为空', trigger: 'blur'}]
       }
     }
   },
@@ -142,12 +147,10 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllPoints(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.pointData = res.data.tableData
-            this.pagination.total = res.data.totalItems
-            for (let item of this.pointData) {
-              item.axis = '[' + item.x + ',' + item.y + ']'
-            }
+          this.pointData = res.data.tableData
+          this.pagination.total = res.data.totalItems
+          for (let item of this.pointData) {
+            item.axis = '[' + item.x + ',' + item.y + ']'
           }
         })
       } catch (e) {
@@ -220,7 +223,7 @@ export default {
         ids.push(pointId)
       }
        if (ids.length == 0) {
-        this.$message.error('请先选择一条记录')
+        this.$message.error('请先选择一条信息')
       } else {
         this.$confirm({
           title: '提示',

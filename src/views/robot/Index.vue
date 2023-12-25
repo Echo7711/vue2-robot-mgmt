@@ -135,10 +135,8 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllRobots(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.robotData = res.data.tableData
-            this.pagination.total = res.data.totalItems
-          }
+          this.robotData = res.data.tableData
+          this.pagination.total = res.data.totalItems
         })
       } catch (e) {
         this.$message.error(e)
@@ -210,7 +208,7 @@ export default {
         ids.push(robotId)
       }
        if (ids.length == 0) {
-        this.$message.error('请先选择一条记录')
+        this.$message.error('请先选择一条信息')
       } else {
         this.$confirm({
           title: '提示',

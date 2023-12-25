@@ -37,10 +37,10 @@ export function editRobot(data) {
 }
 
 // 删除
-export function delRobot(params) {
+export function delRobot(data) {
   return request({
     url: '/robot/delete',
     method: 'delete',
-    params: params
+    data: data
   })
 }

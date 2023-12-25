@@ -101,9 +101,7 @@ export default {
       this.searchForm.pageIndex = pageIndex
       try {
         await getAllMsgs(this.searchForm).then(res => {
-          if (res.code == 1) {
-            this.msgData = res.data.tableData
-          }
+          this.msgData = res.data.tableData
         })
       } catch (e) {
         this.$message.error(e)
@@ -120,15 +118,15 @@ export default {
         ids.push(msgId)
       }
        if (ids.length == 0) {
-        this.$message.error('请先选择一条信息')
+        this.$message.error('请先选择一条消息')
       } else {
         this.$confirm({
           title: '提示',
-          content: '确认所选信息已查收吗?',
+          content: '确认所选消息已查收吗?',
           okText: '确定',
           cancelText: '取消',
           onOk: async () => {
-            await confirmMsg({ids: ids}).then(res => {
+            await confirmMsg(ids).then(res => {
               this.$message.success(res.msg)
               this.selectedRowKeys = []
               this.getData(1)
