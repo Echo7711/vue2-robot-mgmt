@@ -25,7 +25,6 @@
         <div id="barItem" style="width: 80%;height: 25rem;"></div>
       </div>
     </div>
-
   </div>
 </template>
 
