@@ -57,13 +57,13 @@
         this.lineOption = {
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
           },
           yAxis: {
             type: 'value'
           },
           series: [{
-            data: [150, 230, 224, 218, 135, 147, 260],
+            data: [0, 200, 224, 218, 135, 147, 260, 150, 230, 214, 218, 5],
             type: 'line'
           }]
         }
@@ -83,7 +83,7 @@
           },
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
           },
           yAxis: {
             type: 'value'
